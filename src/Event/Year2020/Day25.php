@@ -28,7 +28,6 @@ class Day25 extends DayBase implements DayInterface
 
     public function solvePart2(string $input): string
     {
-        $input = $this->parseInput($input);
         return '';
     }
 
