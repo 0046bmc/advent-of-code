@@ -2,7 +2,7 @@
 
 namespace mahlstrom;
 
-class D3Array
+class D3Array extends MapBase implements MapInterface
 {
     public array $minMax = [
         'z' => [],
@@ -66,23 +66,6 @@ class D3Array
         $this->setMinMax();
     }
 
-    public function oprint()
-    {
-        for ($y = $this->minMax['y'][0]; $y <= $this->minMax['y'][1]; $y++) {
-            for ($z = $this->minMax['z'][0]; $z <= $this->minMax['z'][1]; $z++) {
-                for ($x = $this->minMax['x'][0]; $x <= $this->minMax['x'][1]; $x++) {
-                    if (isset($this->c[$z]) && isset($this->c[$z][$y]) && isset($this->c[$z][$y][$x])) {
-                        echo $this->c[$z][$y][$x];
-                    } else {
-                        echo '.';
-                    }
-                }
-                echo ' ';
-            }
-            echo PHP_EOL;
-        }
-    }
-
     public function print($nr)
     {
         echo 'After ' . $nr . ' '.(($nr == 1) ? 'cycle' : 'cycles').':'.PHP_EOL.PHP_EOL;
@@ -102,8 +85,12 @@ class D3Array
         }
     }
 
-    public function getNeighbors($x, $y, $z)
+    public function getNeighborCoords(int ...$pos): array
     {
+        $this->checkPosCount($pos,3);
+        $x=$pos[0];
+        $y=$pos[1];
+        $z=$pos[2];
         $ret = [];
         for ($zp = -1; $zp <= 1; $zp++) {
             for ($yp = -1; $yp <= 1; $yp++) {

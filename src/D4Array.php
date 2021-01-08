@@ -2,7 +2,9 @@
 
 namespace mahlstrom;
 
-class D4Array
+use Exception;
+
+class D4Array extends MapBase implements MapInterface
 {
     public array $minMax = [
         'w' => [],
@@ -109,8 +111,18 @@ class D4Array
         }
     }
 
-    public function getNeighbors($w, $x, $y, $z)
+    /**
+     * @param int ...$pos // $w, $x, $y, $z
+     * @return array
+     * @throws Exception
+     */
+    public function getNeighborCoords(int ...$pos): array
     {
+        $this->checkPosCount($pos,4);
+        $w=$pos[0];
+        $x=$pos[1];
+        $y=$pos[2];
+        $z=$pos[3];
         $ret = [];
         for ($wp = -1; $wp <= 1; $wp++) {
             for ($zp = -1; $zp <= 1; $zp++) {

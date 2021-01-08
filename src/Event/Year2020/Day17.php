@@ -36,7 +36,7 @@ class Day17 extends DayBase implements DayInterface
             for ($y = $X->minMax['y'][0] - 1; $y <= $X->minMax['y'][1] + 1; $y++) {
                 for ($z = $X->minMax['z'][0] - 1; $z <= $X->minMax['z'][1] + 1; $z++) {
                     for ($x = $X->minMax['x'][0] - 1; $x <= $X->minMax['x'][1] + 1; $x++) {
-                        $res = $X->getNeighbors($x, $y, $z);
+                        $res = $X->getNeighborCoords($x, $y, $z);
                         if (isset($X->c[$z][$y][$x]) && !in_array(count($res), [2, 3])) {
                             unset($Xnew->c[$z][$y][$x]);
                         } elseif (!isset($X->c[$z][$y][$x]) && count($res) == 3) {
@@ -79,7 +79,7 @@ class Day17 extends DayBase implements DayInterface
                 for ($y = $X->minMax['y'][0] - 1; $y <= $X->minMax['y'][1] + 1; $y++) {
                     for ($z = $X->minMax['z'][0] - 1; $z <= $X->minMax['z'][1] + 1; $z++) {
                         for ($x = $X->minMax['x'][0] - 1; $x <= $X->minMax['x'][1] + 1; $x++) {
-                            $res = $X->getNeighbors($w, $x, $y, $z);
+                            $res = $X->getNeighborCoords($w, $x, $y, $z);
                             if (isset($X->c[$w][$z][$y][$x]) && !in_array(count($res), [2, 3])) {
                                 unset($Xnew->c[$w][$z][$y][$x]);
                             } elseif (!isset($X->c[$w][$z][$y][$x]) && count($res) == 3) {
