@@ -6,13 +6,6 @@ use Exception;
 
 class D4Array extends MapBase implements MapInterface
 {
-    public array $minMax = [
-        'w' => [],
-        'z' => [],
-        'y' => [],
-        'x' => []
-    ];
-
     public function __construct(public array $c)
     {
         $this->setMinMax(true);
@@ -20,6 +13,12 @@ class D4Array extends MapBase implements MapInterface
 
     private function setMinMax($removeDots = false): void
     {
+        $this->minMax = [
+            'w' => [],
+            'z' => [],
+            'y' => [],
+            'x' => []
+        ];
         $this->checkMinMax('w', min(array_keys($this->c)), max(array_keys($this->c)));
         foreach ($this->c as $w => $wgrid) {
             $this->checkMinMax('z', min(array_keys($wgrid)), max(array_keys($wgrid)));
@@ -39,24 +38,8 @@ class D4Array extends MapBase implements MapInterface
         }
     }
 
-    public function checkMinMax($dir, $min, $max)
-    {
-        if (!isset($this->minMax[$dir][0]) || $this->minMax[$dir][0] > $min) {
-            $this->minMax[$dir][0] = $min;
-        }
-        if (!isset($this->minMax[$dir][1]) || $this->minMax[$dir][1] < $max) {
-            $this->minMax[$dir][1] = $max;
-        }
-    }
-
     public function cleanUp()
     {
-        $this->minMax = [
-            'w' => [],
-            'z' => [],
-            'y' => [],
-            'x' => []
-        ];
         $this->removeEmpty();
 
         $this->setMinMax();

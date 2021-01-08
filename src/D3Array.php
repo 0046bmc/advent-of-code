@@ -4,12 +4,6 @@ namespace mahlstrom;
 
 class D3Array extends MapBase implements MapInterface
 {
-    public array $minMax = [
-        'z' => [],
-        'y' => [],
-        'x' => []
-    ];
-
     public function __construct(public array $c)
     {
         $this->setMinMax(true);
@@ -17,6 +11,11 @@ class D3Array extends MapBase implements MapInterface
 
     private function setMinMax($removeDots = false): void
     {
+        $this->minMax = [
+            'z' => [],
+            'y' => [],
+            'x' => []
+        ];
         $this->checkMinMax('z', min(array_keys($this->c)), max(array_keys($this->c)));
         foreach ($this->c as $z => $zgrid) {
             $this->checkMinMax('y', min(array_keys($zgrid)), max(array_keys($zgrid)));
@@ -30,16 +29,6 @@ class D3Array extends MapBase implements MapInterface
                     }
                 }
             }
-        }
-    }
-
-    public function checkMinMax($dir, $min, $max)
-    {
-        if (!isset($this->minMax[$dir][0]) || $this->minMax[$dir][0] > $min) {
-            $this->minMax[$dir][0] = $min;
-        }
-        if (!isset($this->minMax[$dir][1]) || $this->minMax[$dir][1] < $max) {
-            $this->minMax[$dir][1] = $max;
         }
     }
 
@@ -58,11 +47,6 @@ class D3Array extends MapBase implements MapInterface
                 }
             }
         }
-        $this->minMax = [
-            'z' => [],
-            'y' => [],
-            'x' => []
-        ];
         $this->setMinMax();
     }
 
