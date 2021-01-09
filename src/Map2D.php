@@ -105,4 +105,23 @@ class Map2D extends MapBase implements MapInterface
     public static function str2map(string $str){
         return array_map('str_split', explode("\n", $str));
     }
+
+    public function getCoord(int ...$pos)
+    {
+        $this->checkPosCount($pos,2);
+        if (!isset($this->a[$pos[0]]) || !isset($this->a[$pos[0]][$pos[1]])) {
+            return 0;
+        }
+        return $this->a[$pos[0]][$pos[1]];
+    }
+
+    public function setCoord(int $val, int ...$pos)
+    {
+        $this->checkPosCount($pos,2);
+        if (!isset($this->a[$pos[0]])) {
+            $this->a[$pos[0]] = [];
+        }
+        $this->a[$pos[0]][$pos[1]] = $val;
+    }
+
 }
