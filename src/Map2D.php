@@ -2,7 +2,7 @@
 
 namespace mahlstrom;
 
-class MapArray
+class Map2D
 {
     public array $a = [];
 

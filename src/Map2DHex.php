@@ -2,10 +2,48 @@
 
 namespace mahlstrom;
 
-class D2HexArray extends MapBase implements MapInterface
+class Map2DHex extends MapBase implements MapInterface
 {
     public function __construct(public array $c)
     {
+    }
+
+    public static function getCoordsDir(int $x, int $y, mixed $dir, $sep = false): string|array
+    {
+        switch ($dir) {
+            case 'se':
+                $x += ($y % 2 == 0) ? 1 : 0;
+                $y += 1;
+                break;
+            case 'sw':
+                $x -= ($y % 2 == 0) ? 0 : 1;
+                $y += 1;
+                break;
+            case 'ne':
+                $x += ($y % 2 == 0) ? 1 : 0;
+                $y -= 1;
+                break;
+            case 'nw':
+                $x -= ($y % 2 == 0) ? 0 : 1;
+                $y -= 1;
+                break;
+            case 'e':
+                $y -= 0;
+                $x += 1;
+                break;
+            case 'w':
+                $y -= 0;
+                $x -= 1;
+                break;
+            default:
+                echo $dir . ' not exists';
+                exit();
+        }
+        if ($sep) {
+            return array($x, $y);
+        } else {
+            return join(',', [$x, $y]);
+        }
     }
 
     public function cleanUp()
@@ -74,7 +112,7 @@ class D2HexArray extends MapBase implements MapInterface
     private function getTileValue(int $x, int $y, string $dir = '')
     {
         if ($dir !== '') {
-            list($nx, $ny) = D2HexHelper::getCoordsDir($x, $y, $dir, true);
+            list($nx, $ny) = self::getCoordsDir($x, $y, $dir, true);
         } else {
             $nx = $x;
             $ny = $y;

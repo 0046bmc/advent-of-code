@@ -6,13 +6,12 @@ namespace App\Event\Year2020;
 
 use AdventOfCode\DayBase;
 use AdventOfCode\DayInterface;
-use mahlstrom\D2HexArray;
-use mahlstrom\D2HexHelper;
+use mahlstrom\Map2DHex;
 
 class Day24 extends DayBase implements DayInterface
 {
 
-    private D2HexArray $hex;
+    private Map2DHex $hex;
 
     public function testPart1(): iterable
     {
@@ -66,7 +65,7 @@ wseweeenwnesenwwwswnew';
     public function solvePart1(string $input): string
     {
         $tiles = $this->parseInput($input);
-        $hex = new D2HexArray([]);
+        $hex = new Map2DHex([]);
         foreach ($tiles as $s) {
             $this->buildMap($s, $hex);
         }
@@ -76,16 +75,16 @@ wseweeenwnesenwwwswnew';
 
     /**
      * @param mixed $s
-     * @param D2HexArray $hex
+     * @param Map2DHex $hex
      * @return mixed
      */
-    private function buildMap(mixed $s, D2HexArray $hex)
+    private function buildMap(mixed $s, Map2DHex $hex)
     {
         $x = 0;
         $y = 0;
         preg_match_all('/((?:se|sw|nw|ne|e|w))/', $s, $ar);
         foreach ($ar[1] as $dir) {
-            list($x, $y) = D2HexHelper::getCoordsDir($x, $y, $dir, true);
+            list($x, $y) = Map2DHex::getCoordsDir($x, $y, $dir, true);
         }
         $hex->setCoord(($hex->getCoord($y, $x) + 1) % 2, $y, $x);
         return $ar;
@@ -94,7 +93,7 @@ wseweeenwnesenwwwswnew';
     public function solvePart2(string $input): string
     {
         $tiles = $this->parseInput($input);
-        $this->hex = new D2HexArray([]);
+        $this->hex = new Map2DHex([]);
         foreach ($tiles as $s) {
             $this->buildMap($s, $this->hex);
         }

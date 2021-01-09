@@ -4,7 +4,7 @@ namespace mahlstrom;
 
 use Exception;
 
-class D4Array extends MapBase implements MapInterface
+class Map4D extends MapBase implements MapInterface
 {
     public function __construct(public array $c)
     {

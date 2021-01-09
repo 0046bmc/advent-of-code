@@ -2,7 +2,7 @@
 
 namespace mahlstrom;
 
-class D3Array extends MapBase implements MapInterface
+class Map3D extends MapBase implements MapInterface
 {
     public function __construct(public array $c)
     {
