@@ -6,6 +6,7 @@ namespace App\Event\Year2020;
 
 use AdventOfCode\DayBase;
 use AdventOfCode\DayInterface;
+use mahlstrom\Map2D;
 use mahlstrom\Map3D;
 use mahlstrom\Map4D;
 
@@ -27,7 +28,7 @@ class Day17 extends DayBase implements DayInterface
 
     public function solvePart1(string $input): string
     {
-        $c[0] = array_map('str_split', explode("\n", chop($input)));
+        $c[0] = Map2D::str2map(chop($input));
         $X = new Map3D($c);
         $Xnew = clone $X;
         $i = 0;
@@ -68,7 +69,7 @@ class Day17 extends DayBase implements DayInterface
 
     public function solvePart2(string $input): string
     {
-        $c[0] = [0 => array_map('str_split', explode("\n", chop($input)))];
+        $c[0] = Map2D::str2map(chop($input));
         $X = new Map4D($c);
         $Xnew = clone $X;
         $i = 0;

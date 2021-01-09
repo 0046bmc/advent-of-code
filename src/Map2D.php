@@ -2,7 +2,7 @@
 
 namespace mahlstrom;
 
-class Map2D
+class Map2D extends MapBase implements MapInterface
 {
     public array $a = [];
 
@@ -52,7 +52,7 @@ class Map2D
         return false;
     }
 
-    public function print()
+    public function print($nr)
     {
         foreach ($this->a as $y => $xAr) {
             foreach ($xAr as $x => $v) {
@@ -62,8 +62,12 @@ class Map2D
         }
     }
 
-    public function getNeighbors(int $r, int $d, $valArray = true)
+    public function getNeighborCoords(int ...$pos): array
     {
+        $this->checkPosCount($pos,2);
+        $r=$pos[0];
+        $d=$pos[1];
+
         $xmin = ($r == 0) ? 0 : -1;
         $xmax = ($r == count($this->a[0]) - 1) ? 0 : 1;
         $ymin = ($d == 0) ? 0 : -1;
@@ -83,5 +87,22 @@ class Map2D
             }
         }
         return $ret;
+    }
+
+    public function cleanUp()
+    {
+        // TODO: Implement cleanUp() method.
+    }
+    public static function flatten($ar){
+        $ret = [];
+        foreach ($ar as $y => $xrow) {
+            foreach ($xrow as $x => $val) {
+                $ret[join(',', [$y, $x])] = $val;
+            }
+        }
+        return $ret;
+    }
+    public static function str2map(string $str){
+        return array_map('str_split', explode("\n", $str));
     }
 }

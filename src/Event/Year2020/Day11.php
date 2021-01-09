@@ -6,6 +6,7 @@ namespace App\Event\Year2020;
 
 use AdventOfCode\DayBase;
 use AdventOfCode\DayInterface;
+use mahlstrom\Map2D;
 
 class Day11 extends DayBase implements DayInterface
 {
@@ -39,7 +40,7 @@ L.LLLLL.LL';
 
     public function solvePart1(string $input): string
     {
-        $curr = array_map('str_split', explode("\n", chop($input)));
+        $curr = Map2D::str2map(chop($input));
         $last = $curr;
         while (true) {
             $curr = $this->populateSeats($curr);
@@ -147,7 +148,7 @@ L.LLLLL.LL';
 
     public function solvePart2(string $input): string
     {
-        $curr = array_map('str_split', explode("\n", chop($input)));
+        $curr = Map2D::str2map(chop($input));
         $last = $curr;
         while (true) {
             $curr = $this->populateSeats($curr, true);
