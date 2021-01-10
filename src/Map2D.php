@@ -2,36 +2,28 @@
 
 namespace mahlstrom;
 
-class Map2D extends MapBase implements MapInterface
+use ArrayAccess;
+
+class Map2D extends MapBase implements MapInterface, ArrayAccess
 {
-    public array $a = [];
-
-    public function __construct(string $input)
+    public function __construct(public array $c=[])
     {
-        foreach (explode("\n", chop($input)) as $y => $str) {
-            $this->a[$y] = str_split(chop($str));
-        }
-    }
-
-    public function set(int $right, int $down, mixed $value)
-    {
-        $this->a[$down][$right] = $value;
     }
 
     /**
      * @param array $path Steps to take [x,y] or [right,down]
-     * @param array $o Origin [x,y] or [right,down]
+     * @param array $start Origin [x,y] or [right,down]
      * @param array $c Array of chars to look for
      * @return int
      */
-    public function countInPath(array $path, array $o = [0, 0], array $c = ['#'])
+    public function countInPath(array $path, array $start = [0, 0], array $c = ['#'])
     {
         $ret = 0;
         $i = 0;
-        while ($o = $this->findCoordsInPath($path, $o, $c, true)) {
+        while ($start = $this->findCoordsInPath($path, $start, $c, true)) {
             $ret++;
-            $o[0] += $path[0];
-            $o[1] += $path[1];
+            $start[0] += $path[0];
+            $start[1] += $path[1];
             $i++;
         }
         return $i;
@@ -40,10 +32,10 @@ class Map2D extends MapBase implements MapInterface
     public function findCoordsInPath(array $steps, array $o, array $c = ['#'], bool $loop = true): array|bool
     {
         list($right, $down) = $o;
-        $width = count($this->a[0]);
-        while ($down < count($this->a)) {
+        $width = count($this->c[0]);
+        while ($down < count($this->c)) {
             $rr = ($loop) ? $right % $width : $right;
-            if (in_array($this->a[$down][$rr], $c)) {
+            if (in_array($this->c[$down][$rr], $c)) {
                 return [$rr, $down];
             }
             $down += $steps[1];
@@ -54,7 +46,7 @@ class Map2D extends MapBase implements MapInterface
 
     public function print($nr)
     {
-        foreach ($this->a as $y => $xAr) {
+        foreach ($this->c as $y => $xAr) {
             foreach ($xAr as $x => $v) {
                 echo $v;
             }
@@ -69,9 +61,9 @@ class Map2D extends MapBase implements MapInterface
         $d=$pos[1];
 
         $xmin = ($r == 0) ? 0 : -1;
-        $xmax = ($r == count($this->a[0]) - 1) ? 0 : 1;
+        $xmax = ($r == count($this->c[0]) - 1) ? 0 : 1;
         $ymin = ($d == 0) ? 0 : -1;
-        $ymax = ($d == count($this->a) - 1) ? 0 : 1;
+        $ymax = ($d == count($this->c) - 1) ? 0 : 1;
         $ret = [];
         for ($x = $xmin; $x <= $xmax; $x++) {
             for ($y = $ymin; $y <= $ymax; $y++) {
@@ -80,9 +72,9 @@ class Map2D extends MapBase implements MapInterface
                 }
                 if ($valArray) {
                     $key = ($r + $x) . ',' . ($d + $y);
-                    $ret[$key] = $this->a[($d + $y)][($r + $x)];
+                    $ret[$key] = $this->c[($d + $y)][($r + $x)];
                 } else {
-                    $ret[] = ['x' => ($r + $x), 'y' => ($d + $y), 'v' => $this->a[($d + $y)][($r + $x)]];
+                    $ret[] = ['x' => ($r + $x), 'y' => ($d + $y), 'v' => $this->c[($d + $y)][($r + $x)]];
                 }
             }
         }
@@ -105,23 +97,79 @@ class Map2D extends MapBase implements MapInterface
     public static function str2map(string $str){
         return array_map('str_split', explode("\n", $str));
     }
+    public static function createFromString(string $str){
+        $s=self::str2map($str);
+        return new Map2D($s);
+    }
 
     public function getCoord(int ...$pos)
     {
         $this->checkPosCount($pos,2);
-        if (!isset($this->a[$pos[0]]) || !isset($this->a[$pos[0]][$pos[1]])) {
+        if (!isset($this->c[$pos[0]]) || !isset($this->c[$pos[0]][$pos[1]])) {
             return 0;
         }
-        return $this->a[$pos[0]][$pos[1]];
+        return $this->c[$pos[0]][$pos[1]];
     }
 
     public function setCoord(int $val, int ...$pos)
     {
         $this->checkPosCount($pos,2);
-        if (!isset($this->a[$pos[0]])) {
-            $this->a[$pos[0]] = [];
+        if (!isset($this->c[$pos[0]])) {
+            $this->c[$pos[0]] = [];
         }
-        $this->a[$pos[0]][$pos[1]] = $val;
+        $this->c[$pos[0]][$pos[1]] = $val;
     }
 
+    public function offsetSet($offset, $value) {
+        $colval = [$value];
+
+        if (!is_array($offset)) {
+            $this->c[$offset] = $colval;
+        } else {
+            if (!isset($this->c[$offset[0]])) $this->c[$offset[0]] = array();
+            $col = &$this->c[$offset[0]];
+            for ($i = 1; $i < sizeof($offset); $i++) {
+                if (!isset($col[$offset[$i]])) $col[$offset[$i]] = array();
+                $col = &$col[$offset[$i]];
+            }
+            $col = $colval;
+        }
+    }
+
+    public function offsetExists($offset): bool
+    {
+        if (!is_array($offset)) {
+            return isset($this->c[$offset]);
+        } else {
+            $key = array_shift($offset);
+            if (!isset($this->c[$key])) return FALSE;
+            $col = &$this->c[$key];
+            while ($key = array_shift($offset)) {
+                if (!isset($col[$key])) return FALSE;
+                $col = &$col[$key];
+            }
+            return TRUE;
+        }
+    }
+
+
+    public function offsetUnset($offset) {
+        if (!is_array($offset)) {
+            unset($this->c[$offset]);
+        } else {
+            $col = &$this->c[array_shift($offset)];
+            while (sizeof($offset) > 1) $col = &$col[array_shift($offset)];
+            unset($col[array_shift($offset)]);
+        }
+    }
+
+    public function &offsetGet($offset) {
+        if (!is_array($offset)) {
+            return $this->c[$offset];
+        } else {
+            $col = &$this->c[array_shift($offset)];
+            while (sizeof($offset) > 0) $col = &$col[array_shift($offset)];
+            return $col;
+        }
+    }
 }

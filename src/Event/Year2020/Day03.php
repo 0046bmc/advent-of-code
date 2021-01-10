@@ -42,7 +42,7 @@ class Day03 extends DayBase implements DayInterface
 
     public function solvePart1(string $input): string
     {
-        $b = new Map2D($input);
+        $b=Map2D::createFromString($input);
         return (string)$b->countInPath([3, 1]);
     }
 
@@ -55,7 +55,7 @@ class Day03 extends DayBase implements DayInterface
             [7, 1],
             [1, 2]
         ];
-        $b = new Map2D($input);
+        $b=Map2D::createFromString($input);
         $ret = 1;
         foreach ($slopes as $slope) {
             $ret = $ret * $b->countInPath([$slope[0], $slope[1]]);

@@ -29,8 +29,8 @@ class Day03 extends DayBase implements DayInterface
         $M = str_split(chop($input));
         $x = 0;
         $y = 0;
-        $res = new Map2D('');
-        $res->setCoord(1, $y, $x);
+        $res = new Map2D();
+        $res[$y][$x]=1;
         foreach ($M as $d) {
             $x = match ($d) {
                 '>' => $x + 1,
@@ -45,17 +45,17 @@ class Day03 extends DayBase implements DayInterface
 
             $res->setCoord(1, $y, $x);
         }
-        return (string)array_sum(Map2D::flatten($res->a));
+        return (string)array_sum(Map2D::flatten($res->c));
     }
 
     public function solvePart2(string $input): string
     {
         $M = str_split(chop($input));
         $x = $y = [0, 0];
-        $res = new Map2D('');
-        $res2 = new Map2D('');
-        $res->setCoord(1, $y[0], $x[0]);
-        $res2->setCoord(1, $y[1], $x[1]);
+        $res = new Map2D();
+        $res2 = new Map2D();
+        $res[$y[0]][$x[0]]=1;
+        $res[$y[1]][$x[1]]=1;
         foreach ($M as $i => $d) {
             $w = $i % 2;
             $x[$w] = match ($d) {
@@ -68,9 +68,9 @@ class Day03 extends DayBase implements DayInterface
                 '^' => $y[$w] - 1,
                 default => $y[$w]
             };
-            $res->setCoord(1, $y[0], $x[0]);
-            $res2->setCoord(1, $y[1], $x[1]);
+            $res[$y[0]][$x[0]]=1;
+            $res2[$y[1]][$x[1]]=1;
         }
-        return (string)array_sum(Map2D::flatten($res->a) + Map2D::flatten($res2->a));
+        return (string)array_sum(Map2D::flatten($res->c) + Map2D::flatten($res2->c));
     }
 }
