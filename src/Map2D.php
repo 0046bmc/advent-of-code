@@ -172,4 +172,9 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
             return $col;
         }
     }
+
+    public function flat()
+    {
+        return self::flatten($this->c);
+    }
 }
