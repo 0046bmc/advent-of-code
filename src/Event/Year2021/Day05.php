@@ -7,6 +7,7 @@ namespace App\Event\Year2021;
 use AdventOfCode\DayBase;
 use AdventOfCode\DayInterface;
 use App\Event\Year2021\Helpers\Grid2D;
+use mahlstrom\Map2D;
 
 class Day05 extends DayBase implements DayInterface
 {
@@ -40,7 +41,7 @@ class Day05 extends DayBase implements DayInterface
 
     public function solvePart1(string $input): string
     {
-        $O = new Grid2D();
+        $O = new Map2D();
         $input = $this->parseInput($input);
         foreach ($input as $item) {
             $cc = sscanf($item, '%d,%d -> %d,%d');
@@ -49,18 +50,18 @@ class Day05 extends DayBase implements DayInterface
             }
         }
 
-        return (string)array_count_values($O->points)[2];
+        return (string)array_count_values($O->c)[2];
     }
 
     public function solvePart2(string $input): string
     {
-        $O = new Grid2D();
+        $O = new Map2D();
         $input = $this->parseInput($input);
         foreach ($input as $item) {
             $cc = sscanf($item, '%d,%d -> %d,%d');
             $O->drawLine([$cc[0], $cc[1]], [$cc[2], $cc[3]]);
         }
 
-        return (string)array_count_values($O->points)[2];
+        return (string)array_count_values($O->c)[2];
     }
 }
