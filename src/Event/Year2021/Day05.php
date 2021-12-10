@@ -6,7 +6,6 @@ namespace App\Event\Year2021;
 
 use AdventOfCode\DayBase;
 use AdventOfCode\DayInterface;
-use App\Event\Year2021\Helpers\Grid2D;
 use mahlstrom\Map2D;
 
 class Day05 extends DayBase implements DayInterface
