@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+PHPDocumentor configuration file.
+
+minimum version: ^3.2
+
+@see https://docs.phpdoc.org/guide/references/configuration.html
+-->
+<phpdocumentor
+        configVersion="3"
+        xmlns="https://www.phpdoc.org"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org https://docs.phpdoc.org/latest/phpdoc.xsd"
+>
+    <title>Advent of Code solutions by BMC</title>
+    <paths>
+        <output>docs</output>
+        <cache>.tools/phpdoc/cache</cache>
+    </paths>
+    <version number="1.0.0">
+        <api>
+            <source dsn=".">
+                <path>src</path>
+            </source>
+            <default-package-name>AdventOfCode</default-package-name>
+        </api>
+    </version>
+</phpdocumentor>

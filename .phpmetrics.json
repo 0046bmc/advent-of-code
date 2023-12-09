@@ -1,0 +1,20 @@
+{
+  "composer" : false,
+  "includes": [
+    "."
+  ],
+  "excludes" : [
+    ".tools/",
+    "Inputs/",
+    "Inputs_old/",
+    "vendor/"
+  ],
+  "report" : {
+    "html" : ".tools/phpmetrics/"
+  },
+  "plugins" : {
+    "git" : {
+      "binary" : "git"
+    }
+  }
+}

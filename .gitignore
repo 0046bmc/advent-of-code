@@ -1,7 +1,14 @@
 /.cookie.txt
 /src/Event/Year2019
-/Inputs
+/Inputs*
 /vendor
 /app
 /co*
 /.idea
+/docs
+/.phive
+/.phpdoc
+/.run
+/tools
+tmp
+.DS_Store
