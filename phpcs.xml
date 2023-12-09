@@ -23,4 +23,5 @@ minimum version: ^3.7
     <exclude-pattern>*/.git/*</exclude-pattern>
     <exclude-pattern>*/.tools/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/tmp/*</exclude-pattern>
 </ruleset>

@@ -5,6 +5,7 @@
   ],
   "excludes" : [
     ".tools/",
+    "tmp/",
     "Inputs/",
     "Inputs_old/",
     "vendor/"
