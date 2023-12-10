@@ -21,7 +21,7 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         }
     }
 
-    public static function createFromString(string $str)
+    public static function createFromString(string $str): Map2D
     {
         $s = self::str2map(trim($str));
         return new Map2D($s);
@@ -75,7 +75,12 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return false;
     }
 
-    public function print($nr, $flashed = false): void
+    /**
+     * @param int $nr
+     * @param bool|array<string> $flashed
+     * @return void
+     */
+    public function print(int $nr, bool|array $flashed = false): void
     {
         foreach ($this->c as $y => $xAr) {
             foreach ($xAr as $x => $v) {
@@ -89,6 +94,10 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         }
     }
 
+    /**
+     * @param int ...$pos
+     * @return array|mixed[]
+     */
     public function getNeighborCoords(int ...$pos): array
     {
         $this->checkPosCount($pos, 2);
@@ -119,6 +128,10 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return $ret;
     }
 
+    /**
+     * @param int ...$pos
+     * @return array|mixed[]
+     */
     public function getNeighborCoordsWithKey(int ...$pos): array
     {
         $this->checkPosCount($pos, 2);
@@ -153,6 +166,10 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return $ret;
     }
 
+    /**
+     * @param int ...$pos
+     * @return array|mixed[]
+     */
     public function getNeighborCoordsUDLR(int ...$pos): array
     {
         $this->checkPosCount($pos, 2);
@@ -251,12 +268,19 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         }
     }
 
-    public function flat()
+    /**
+     * @return mixed[]
+     */
+    public function flat(): array
     {
         return self::flatten($this->c);
     }
 
-    public static function flatten($ar)
+    /**
+     * @param array<array<mixed>> $ar
+     * @return mixed[]
+     */
+    public static function flatten(array $ar): array
     {
         $ret = [];
         foreach ($ar as $y => $xrow) {
@@ -267,6 +291,11 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return $ret;
     }
 
+    /**
+     * @param mixed[] $pt1
+     * @param mixed[] $pt2
+     * @return void
+     */
     public function drawLine(array $pt1, array $pt2): void
     {
         foreach (Math::latticePoints($pt1[0], $pt1[1], $pt2[0], $pt2[1]) as $key) {
@@ -289,7 +318,7 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return true;
     }
 
-    public function getLowestNeighbors(int $x, int $y)
+    public function getLowestNeighbors(int $x, int $y): void
     {
         $here = $this->getCoord($x, $y);
         $chords = [$x - 1 => [$y], $x + 1 => [$y], $x => [$y - 1, $y + 1]];
@@ -327,7 +356,10 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         $this->c[$y][$x] = $val;
     }
 
-    public function itterate($func)
+    /**
+     * @return mixed[]
+     */
+    public function itterate(callable $func): array
     {
         $ret = [];
         foreach ($this->c as $y => $xval) {
@@ -338,7 +370,10 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return $ret;
     }
 
-    public function getFullNumber($x, $y)
+    /**
+     * @return mixed[]
+     */
+    public function getFullNumber(int $x, int $y): array
     {
         $used = [];
         $nAr = [];
@@ -360,7 +395,7 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         return [join($nAr), $used];
     }
 
-    public static function getDistace($x1, $y1, $x2, $y2)
+    public static function getDistace(int $x1, int $y1, int $x2, int $y2): float
     {
         return sqrt(pow(($x2 - $x1), 2) + pow(($y2 - $y1), 2));
     }
