@@ -2,7 +2,7 @@
 
 namespace App\Y2015\Helpers;
 
-use \Exception;
+use Exception;
 
 class Circuit
 {
@@ -39,14 +39,14 @@ class Circuit
             list($a, $op, $b, $out) = $this->parseLine($line);
             try {
                 $num = $this->getNum($a);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->queue[] = $line;
                 continue;
             }
             if (in_array($op, ['AND', 'OR', 'LSHIFT', 'RSHIFT'])) {
                 try {
                     $num2 = $this->getNum($b);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->queue[] = $line;
                     continue;
                 }
@@ -66,7 +66,7 @@ class Circuit
     /**
      * @param string $line
      * @return mixed[]
-     * @throws \Exception
+     * @throws Exception
      */
     private function parseLine(string $line): array
     {
@@ -86,7 +86,7 @@ class Circuit
             $out = $match[3];
             $b = null;
         } else {
-            throw new \Exception("parse error");
+            throw new Exception("parse error");
         }
 
         return [$a, $op, $b, $out];

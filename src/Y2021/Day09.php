@@ -36,8 +36,8 @@ class Day09 extends DayBase implements DayInterface
         $m->defaultGridValue = false;
 
         $res = 0;
-        foreach ($m->c as $y=>$xd){
-            foreach($xd as $x=>$v){
+        foreach ($m->c as $y => $xd) {
+            foreach ($xd as $x => $v) {
                 $isLow = $m->isLowestInNeighborhood($x, $y);
                 if ($isLow) {
                     $res += (intval($m->getCoord($x, $y)) + 1);
