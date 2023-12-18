@@ -11,14 +11,6 @@ use Phaoc\DayInterface;
 
 class Day16 extends DayBase implements DayInterface
 {
-    private Map2D $g;
-
-    private $heat = [];
-    private $heatDir = [];
-    private array $runners = [];
-    private array $dir = [];
-    private Map2D $p;
-
     /**
      * @return iterable<string>
      */
@@ -37,7 +29,7 @@ class Day16 extends DayBase implements DayInterface
 
     public function solvePart1(string $input): string
     {
-        $MR=new MirrorRunner($input);
+        $MR = new MirrorRunner($input);
 
         $start = [0, 0];
         $dir = 1;
@@ -49,48 +41,17 @@ class Day16 extends DayBase implements DayInterface
 
     public function solvePart2(string $input): string
     {
-        $rret=0;
-        $MR=new MirrorRunner($input);
-        $maxY=count($MR->g->c)-1;
-        $maxX=count($MR->g->c[0])-1;
-        for($y=0;$y<$maxY;$y++){
-            $start = [0, $y];
-            $dir = 1;
-            $ret = $MR->run($start, $dir);
-            if($rret<$ret){
-                $rret=$ret;
-            }
-            $MR=new MirrorRunner($input);
+        $MR = new MirrorRunner($input);
+        $counts = [];
+        for ($y = 0; $y < $MR->maxY; $y++) {
+            $counts[] = $MR->run([0, $y], 1);
+            $counts[] = $MR->run([$MR->maxX, $y], 3);
         }
-        for($y=0;$y<$maxY;$y++){
-            $start = [$maxX, $y];
-            $dir = 3;
-
-            $ret = $MR->run($start, $dir);
-            if($rret<$ret){
-                $rret=$ret;
-            }
-            $MR=new MirrorRunner($input);
-        }
-        for($x=0;$x<$maxX;$x++){
-            $start = [$x, 0];
-            $dir = 2;
-            $MR=new MirrorRunner($input);
-            $ret = $MR->run($start, $dir);
-            if($rret<$ret){
-                $rret=$ret;
-            }
-        }
-        for($x=0;$x<$maxX;$x++){
-            $start = [$x, $maxY];
-            $dir = 2;
-            $MR=new MirrorRunner($input);
-            $ret = $MR->run($start, $dir);
-            if($rret<$ret){
-                $rret=$ret;
-            }
+        for ($x = 0; $x < $MR->maxX; $x++) {
+            $counts[] = $MR->run([$x, 0], 2);
+            $counts[] = $MR->run([$x, $MR->maxY], 0);
         }
 
-        return (string)$rret;
+        return (string)max($counts);
     }
 }

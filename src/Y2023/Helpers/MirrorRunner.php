@@ -3,40 +3,51 @@
 namespace App\Y2023\Helpers;
 
 use App\Map2D;
+use Exception;
 
 class MirrorRunner
 {
     public Map2D $g;
     /**
-     * @var array|array[]
+     * @var array<int,array<int>>
      */
     private array $runners = [];
     /**
      * @var array|int[]
      */
-    private array $dir;
-    public array $heat = [];
-    private array $heatDir;
-    private bool $output;
+    private array $dir = [];
 
-    public function __construct(string $input, bool $output = false)
+    /**
+     * @var array<string,bool>
+     */
+    public array $heat = [];
+    /**
+     * @var array<string,bool>
+     */
+    private array $heatDir = [];
+    public int $maxX;
+    public int $maxY;
+
+    public function __construct(string $input)
     {
         $this->g = Map2D::createFromString($input);
-        $this->output = $output;
+        $this->maxX = (count($this->g->c[0]) - 1);
+        $this->maxY = (count($this->g->c) - 1);
     }
 
     /**
-     * @param array $start
+     * @param array<int> $start
      * @param int $dir
      * @return int|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function run(array $start, int $dir): ?int
     {
         $this->runners = [$start];
         $this->dir = [$dir];
-        $key=join('-', $start);
-        $this->heat = [$key=>true];
+        $key = join('-', $start);
+        $this->heat = [$key => true];
+        $this->heatDir = [];
 
         while (count($this->runners)) {
             foreach ($this->runners as $runnerId => $runner) {
@@ -47,14 +58,13 @@ class MirrorRunner
                 $this->walk($runnerId);
             }
         }
-
-        $ret = count($this->heat);
-        return $ret;
+        return count($this->heat);
     }
 
     /**
      * @param int $runnerId
      * @return void
+     * @throws Exception
      */
     public function checkDir(int $runnerId): void
     {
@@ -67,7 +77,7 @@ class MirrorRunner
                     1 => 0,
                     2 => 3,
                     3 => 2,
-                    default => throw new \Exception('this')
+                    default => throw new Exception('this')
                 };
                 break;
             case '\\':
@@ -76,7 +86,7 @@ class MirrorRunner
                     3 => 0,
                     1 => 2,
                     2 => 1,
-                    default => throw new \Exception('this')
+                    default => throw new Exception('this')
                 };
                 break;
             case '|':
@@ -93,10 +103,10 @@ class MirrorRunner
                     $this->dir[] = 3;
                 }
                 break;
-        };
+        }
     }
 
-    private function walk(int $runnerId)
+    private function walk(int $runnerId): void
     {
         [$x, $y] = $this->runners[$runnerId];
         $this->runners[$runnerId] = match ($this->dir[$runnerId]) {
@@ -104,7 +114,7 @@ class MirrorRunner
             1 => [($x + 1), $y],
             2 => [$x, ($y + 1)],
             3 => [($x - 1), $y],
-            default => throw new \Exception('this')
+            default => throw new Exception('this')
         };
         $keyDir = join('-', $this->runners[$runnerId]) . '-' . $this->dir[$runnerId];
         if (
@@ -120,12 +130,6 @@ class MirrorRunner
             $key = join('-', $this->runners[$runnerId]);
             $this->heat[$key] = true;
             $this->heatDir[$keyDir] = true;
-            $sign = match ($this->dir[$runnerId]) {
-                0 => '^',
-                1 => '>',
-                2 => 'v',
-                3 => '<',
-            };
         }
     }
 }
