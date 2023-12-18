@@ -311,11 +311,7 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
         foreach ($chords as $xx => $yyx) {
             foreach ($yyx as $yy) {
                 $p = $this->getCoord($xx, $yy);
-//                if($x==1 && $y==0){
-//                    echo $xx.':'.$yy.'='.$p.PHP_EOL;
-//                    var_dump($p);
-//                }
-                if ($p !== false &&$p !== "" && $p <= $here) {
+                if ($p !== false && $p !== "" && $p <= $here) {
                     return false;
                 }
             }
