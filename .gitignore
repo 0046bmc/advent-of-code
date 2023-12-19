@@ -12,5 +12,6 @@
 /co*
 /docs
 /tools
+/answers.json
 tmp
 .DS_Store
