@@ -15,3 +15,4 @@
 /answers.json
 tmp
 .DS_Store
+/.direnv
