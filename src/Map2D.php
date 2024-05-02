@@ -9,6 +9,9 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
     public mixed $defaultGridValue = 0;
     public int $nrOf = 0;
 
+    public int $maxX;
+    public int $maxY;
+
     /**
      * @param array<array<string>> $c
      */
@@ -19,6 +22,8 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
                 $this->nrOf++;
             }
         }
+        $this->maxX = count($this->c[0]);
+        $this->maxY = count($this->c);
     }
 
     public static function createFromString(string $str): Map2D
@@ -60,7 +65,7 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
      * @param bool $loop
      * @return array<string>|bool
      */
-    public function findCoordsInPath(array $path, array $start, array $c = ['#'], bool $loop = true): array | bool
+    public function findCoordsInPath(array $path, array $start, array $c = ['#'], bool $loop = true): array|bool
     {
         list($right, $down) = $start;
         $width = count($this->c[0]);
@@ -87,7 +92,21 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
                 if ($flashed && in_array($x . ',' . $y, $flashed)) {
                     echo "\e[0;31m$v\e[0m,";
                 } else {
-                    echo $v . ',';
+                    echo $v;// . ',';
+                }
+            }
+            echo PHP_EOL;
+        }
+    }
+
+    public function map()
+    {
+        for ($y = 0; $y < $this->maxY; $y++) {
+            for ($x = 0; $x < $this->maxX; $x++) {
+                if (isset($this->c[$y]) && isset($this->c[$y][$x])) {
+                    echo $this->getCoord($x, $y);
+                } else {
+                    echo '.';
                 }
             }
             echo PHP_EOL;
@@ -399,5 +418,16 @@ class Map2D extends MapBase implements MapInterface, ArrayAccess
     public static function getDistace(int $x1, int $y1, int $x2, int $y2): float
     {
         return sqrt(pow(($x2 - $x1), 2) + pow(($y2 - $y1), 2));
+    }
+
+    public function clearAll(string $chr = '.'): void
+    {
+        foreach ($this->c as $y => $xval) {
+            foreach ($xval as $x => $value) {
+                if ($value === $chr) {
+                    unset($this->c[$y][$x]);
+                }
+            }
+        }
     }
 }
