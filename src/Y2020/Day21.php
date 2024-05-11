@@ -44,6 +44,10 @@ sqjhc mxmxvkd sbzzf (contains fish)';
         return join(',', $aler);
     }
 
+    /**
+     * @param string $input
+     * @return array<int, array<string, string>>
+     */
     private function parseIngredients(string $input): array
     {
         $input = $this->parseInput($input);
